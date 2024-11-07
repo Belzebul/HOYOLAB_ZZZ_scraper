@@ -1,0 +1,8 @@
+Lib/*
+Scripts/*
+src/dist/*
+src/build/*
+src/hoyolab_equips_webscraper.spec
+pyvenv.cfg
+src/hoyolab_character.json
+src/hoyolab_data/hoyolab_character.json
