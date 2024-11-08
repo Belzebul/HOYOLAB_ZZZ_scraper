@@ -1,5 +1,6 @@
 import json
 import os
+import tkinter as tk
 from pathlib import Path
 
 import requests
@@ -52,9 +53,9 @@ def _request_json(url: str) -> dict:
 
 
 def _request_chars_data(json_chars: dict) -> list:
-    char_json_list:list = []
+    char_json_list: list = []
     for char_name in json_chars:
-        url = f'{URL_CHAR_DATA}{str(char_name['id'])}{URL_CHAR_PARAM}{USER_ID}'
+        url = f'{URL_CHAR_DATA}{str(char_name["id"])}{URL_CHAR_PARAM}{USER_ID}'
         print(f'load data -> {char_name["full_name_mi18n"]}', end='... ')
         json_aux = _request_json(url)
         char_json_list.append(json_aux)
@@ -63,18 +64,41 @@ def _request_chars_data(json_chars: dict) -> list:
 
 
 def write_files(chars_data: list) -> None:
-    path = Path(__file__).parent.parent.resolve()
     file_name = "hoyolab_character.json"
-    file_path = Path(path / file_name)
-    with open(file_path, "w", encoding="UTF-8") as file:
+    with open(f'{os.getcwd()}{os.sep}{file_name}', "w", encoding="UTF-8") as file:
         file.write(json.dumps(chars_data, indent=4))
 
     print(f"{file_name} saved!")
-    input();
+
+
+def show_done_message():
+    """tkinter window to pause the application and show the user
+    the script is done."""
+
+    root = tk.Tk()
+    root.title('HOYOLAB ZZZ Scraper')
+
+    window_width = 300
+    window_height = 100
+
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+
+    position_x = (screen_width // 2) - (window_width // 2)
+    position_y = (screen_height // 2) - (window_height // 2)
+
+    root.geometry(f'{window_width}x{window_height}+{position_x}+{position_y}')
+
+    label = tk.Label(root, text='Done', font=("Helvetica", 12))
+    label.pack(pady=10)
+
+    button = tk.Button(root, text='Close', command=root.destroy)
+    button.pack(pady=10)
+
+    root.mainloop()
 
 
 if __name__ == "__main__":
     hoyolab_chars: list = load_chars_data()
     write_files(hoyolab_chars)
-    pass
-
+    show_done_message()
